@@ -10,8 +10,15 @@
   },
   "dependencies": {
     "@mantine/core": "7.14.1",
+    "@mantine/dates": "^7.14.1",
     "@mantine/hooks": "7.14.1",
+    "@mantine/modals": "^7.14.1",
+    "@mantine/notifications": "^7.14.1",
+    "@serwist/next": "^9.0.10",
+    "@tabler/icons-react": "^3.22.0",
+    "dayjs": "^1.11.13",
     "next": "15.0.1",
+    "next-auth": "^4.24.10",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
@@ -21,9 +28,11 @@
     "@types/react-dom": "18.3.0",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.4",
+    "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "^7.0.1",
+    "serwist": "^9.0.10",
     "typescript": "5.5.2"
   },
   "packageManager": "yarn@4.5.1"
