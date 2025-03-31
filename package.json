@@ -9,31 +9,32 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "7.17.0",
-    "@mantine/dates": "^7.17.0",
-    "@mantine/hooks": "7.17.0",
-    "@mantine/modals": "^7.17.0",
-    "@mantine/notifications": "^7.17.0",
+    "@mantine/core": "7.17.2",
+    "@mantine/dates": "^7.17.2",
+    "@mantine/hooks": "7.17.2",
+    "@mantine/modals": "^7.17.2",
+    "@mantine/notifications": "^7.17.2",
     "@serwist/next": "^9.0.10",
     "@tabler/icons-react": "^3.22.0",
     "@types/react": "18",
     "dayjs": "^1.11.13",
-    "next": "15.1.5",
+    "next": "15.2.3",
     "next-auth": "^4.24.10",
-    "react": "18",
-    "react-dom": "18"
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   },
   "devDependencies": {
-    "@types/node": "22.10.7",
-    "@types/react-dom": "^18",
-    "eslint": "9.18.0",
-    "eslint-config-next": "15.1.5",
+    "@types/node": "22.13.11",
+    "@types/react": "19.0.12",
+    "@types/react-dom": "19.0.4",
+    "eslint": "9.23.0",
+    "eslint-config-next": "15.2.3",
     "eslint-config-prettier": "^9.1.0",
-    "postcss": "^8.5.1",
+    "postcss": "^8.5.3",
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "serwist": "^9.0.10",
-    "typescript": "5.7.3"
+    "typescript": "5.8.2"
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.7.0"
 }
