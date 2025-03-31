@@ -14,7 +14,7 @@ export default function Login() {
           <Card shadow="sm" padding="lg" radius="md" withBorder w={400}>
             <Card.Section>
               <Image
-                src="/secure-login.svg"
+                src="/secure.svg"
                 width="auto"
                 height={300}
                 fit="contain"
@@ -45,6 +45,7 @@ export default function Login() {
             >
               Sign In
             </Button>
+            <Text mt={20} c="dimmed" size="xs" component='a' href="https://storyset.com/online">Online illustrations by Storyset</Text>
           </Card>
         </Group>
       </Container>
