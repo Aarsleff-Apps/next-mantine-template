@@ -7,6 +7,6 @@ Includes the following
 * Mantine Notifications
 * Mantine Modals Manager
 * Mantine Date
-* Next-Auth with Azure Entra SSO
+* Clerk with Azure Entra SSO
 * PWA support from serwist
 * Tabler Icons

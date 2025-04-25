@@ -6,11 +6,11 @@ import { MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { theme } from "../theme";
-import { SessionProvider } from "next-auth/react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export default function App({ Component, pageProps }: any) {
   return (
-    <SessionProvider>
+    <ClerkProvider {...pageProps}>
       <MantineProvider defaultColorScheme="auto" theme={theme}>
         <ModalsProvider>
           <Notifications position="top-right" />
@@ -39,6 +39,6 @@ export default function App({ Component, pageProps }: any) {
           <Component {...pageProps} />
         </ModalsProvider>
       </MantineProvider>
-    </SessionProvider>
+    </ClerkProvider>
   );
 }
