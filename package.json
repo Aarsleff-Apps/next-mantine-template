@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.18.0",
-    "@mantine/core": "7.17.2",
+    "@mantine/core": "8.1.2",
     "@mantine/dates": "^7.17.2",
-    "@mantine/hooks": "7.17.2",
+    "@mantine/hooks": "8.1.2",
     "@mantine/modals": "^7.17.2",
     "@mantine/notifications": "^7.17.2",
     "@serwist/next": "^9.0.10",
@@ -20,23 +20,23 @@
     "@types/react": "18",
     "canvas-confetti": "^1.9.3",
     "dayjs": "^1.11.13",
-    "next": "15.2.3",
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "next": "15.3.3",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1",
     "@types/node": "22.13.11",
-    "@types/react": "19.0.12",
-    "@types/react-dom": "19.0.4",
-    "eslint": "9.23.0",
-    "eslint-config-next": "15.2.3",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
+    "eslint": "9.29.0",
+    "eslint-config-next": "15.3.3",
     "eslint-config-prettier": "^9.1.0",
-    "postcss": "^8.5.3",
+    "postcss": "^8.5.5",
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "serwist": "^9.0.10",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   },
-  "packageManager": "yarn@4.7.0"
+  "packageManager": "yarn@4.9.2"
 }
