@@ -1,11 +1,19 @@
-import { AppShell, Container, Group, Image, Flex } from "@mantine/core";
+import {
+  AppShell,
+  Container,
+  Group,
+  Image,
+  Flex,
+  useMantineColorScheme,
+  useComputedColorScheme,
+} from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import NextImage from "next/image";
 import AarsleffLogo from "/public/Aarsleff Logo.png";
 import AarsleffLogoWhite from "/public/Aarsleff Logo White.png";
 import classes from "./Nav.module.css";
 import cx from "clsx";
-import { IconDatabase } from "@tabler/icons-react";
+import { IconDatabase, IconMoon, IconSun } from "@tabler/icons-react";
 import NavFooterForms from "./NavFooterForms/NavFooterForms";
 import NavButton from "./NavButton/NavButton";
 import NavFooterSettings from "./NavFooterSettings/NavFooterSettings";
@@ -58,6 +66,8 @@ export default function Nav({ children }: { children: React.ReactNode }) {
       updateUserMetadata();
     }
   }, [isLoaded]);
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme();
 
   return (
     <AppShell
@@ -91,7 +101,34 @@ export default function Nav({ children }: { children: React.ReactNode }) {
             />
             {isSignedIn ? (
               <div id="UserAvatar">
-                <UserButton />
+                <UserButton>
+                  <UserButton.MenuItems>
+                    <UserButton.Action
+                      label={
+                        computedColorScheme === "light"
+                          ? "Dark Mode"
+                          : "Light Mode"
+                      }
+                      labelIcon={
+                        <>
+                          <IconSun
+                            className={cx(classes.light, classes.icon)}
+                            style={{ marginTop: -5 }}
+                          />
+                          <IconMoon
+                            className={cx(classes.dark, classes.icon)}
+                            style={{ marginTop: -5 }}
+                          />
+                        </>
+                      }
+                      onClick={() =>
+                        setColorScheme(
+                          computedColorScheme === "light" ? "dark" : "light"
+                        )
+                      }
+                    />
+                  </UserButton.MenuItems>
+                </UserButton>
               </div>
             ) : null}
           </Group>
