@@ -18,10 +18,7 @@
       "@serwist/next/typings"
     ],
     "paths": {
-      "@/components/*": ["./components/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/types/*": ["./types/*"],
-      "@/root/*": ["./*"]
+      "@/*": ["./*"]
     },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

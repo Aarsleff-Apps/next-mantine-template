@@ -82,6 +82,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
               src={AarsleffLogo}
               alt="My image"
               h={30}
+              w="auto"
               className={cx(classes.dark)}
               onClick={() => fireConfetti()}
             />
@@ -90,6 +91,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
               src={AarsleffLogoWhite}
               alt="My image"
               h={30}
+              w="auto"
               className={cx(classes.light)}
               onClick={() => fireConfetti()}
             />
