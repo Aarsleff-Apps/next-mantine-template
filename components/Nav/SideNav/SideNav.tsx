@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useDisclosure } from "@mantine/hooks";
 import HelpModal from "../HelpModal/HelpModal";
 import { useAuth, useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -29,7 +30,7 @@ function NavbarLink({ icon: Icon, label, active, href }: NavbarLinkProps) {
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
       <UnstyledButton
-        component="a"
+        component={Link}
         href={href}
         className={classes.link}
         data-active={active || undefined}

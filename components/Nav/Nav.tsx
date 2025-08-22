@@ -1,9 +1,7 @@
 import {
   AppShell,
-  Container,
   Group,
   Image,
-  Flex,
   useMantineColorScheme,
   useComputedColorScheme,
 } from "@mantine/core";
@@ -13,23 +11,19 @@ import AarsleffLogo from "/public/Aarsleff Logo.png";
 import AarsleffLogoWhite from "/public/Aarsleff Logo White.png";
 import classes from "./Nav.module.css";
 import cx from "clsx";
-import { IconDatabase, IconMoon, IconSun } from "@tabler/icons-react";
-import NavFooterForms from "./NavFooterForms/NavFooterForms";
-import NavButton from "./NavButton/NavButton";
-import NavFooterSettings from "./NavFooterSettings/NavFooterSettings";
+import { IconMoon, IconSun } from "@tabler/icons-react";
 import SideNav from "./SideNav/SideNav";
 //import * as Sentry from "@sentry/nextjs";
 
 import confetti from "canvas-confetti";
 import { useAuth, UserButton, useSession, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
+import NavFooter from "./NavFooter/NavFooter";
 
 export default function Nav({ children }: { children: React.ReactNode }) {
   const { width } = useViewportSize();
   const { isLoaded, user } = useUser();
   const { isSignedIn } = useAuth();
-  const router = useRouter();
   const { session } = useSession();
 
   // if (isLoaded) {
@@ -139,23 +133,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer id="footer">
-        <Container size="xs" px="30px" mb="10px">
-          <Flex justify="space-between" align="center" mt={5}>
-            <div id="dataLink">
-              <NavButton
-                label={"Data"}
-                Icon={IconDatabase}
-                onClick={() => router.push("/data")}
-              />
-            </div>
-            <div id="formsLink">
-              <NavFooterForms />
-            </div>
-            <div id="userLink">
-              <NavFooterSettings />
-            </div>
-          </Flex>
-        </Container>
+        <NavFooter />
       </AppShell.Footer>
     </AppShell>
   );

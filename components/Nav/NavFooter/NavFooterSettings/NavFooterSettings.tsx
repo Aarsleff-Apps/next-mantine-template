@@ -1,8 +1,11 @@
 import {
+  Flex,
   Menu,
   rem,
+  UnstyledButton,
   useComputedColorScheme,
   useMantineColorScheme,
+  Text,
 } from "@mantine/core";
 import {
   IconBook,
@@ -13,9 +16,8 @@ import {
 } from "@tabler/icons-react";
 import classes from "./NavFooterSettings.module.css";
 import cx from "clsx";
-import HelpModal from "../HelpModal/HelpModal";
+import HelpModal from "../../HelpModal/HelpModal";
 import { useDisclosure } from "@mantine/hooks";
-import NavButton from "../NavButton/NavButton";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 
 export default function NavFooterSettings() {
@@ -28,7 +30,14 @@ export default function NavFooterSettings() {
     <>
       <Menu shadow="md" withArrow={true}>
         <Menu.Target>
-          <NavButton Icon={IconSettings} label="Settings" onClick={() => {}} />
+          <UnstyledButton style={{ width: "50px", height: "50px" }}>
+            <Flex gap={0} justify="center" align="center" direction="column">
+              <IconSettings style={{ width: 25, height: 25 }} stroke={1.5} />
+              <Text fw={200} size="sm">
+                Settings
+              </Text>
+            </Flex>
+          </UnstyledButton>
         </Menu.Target>
 
         <Menu.Dropdown>
