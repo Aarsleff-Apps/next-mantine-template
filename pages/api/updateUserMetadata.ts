@@ -42,9 +42,9 @@ export default async function handle(
 
   const metadata = {
     publicMetadata: {
+      ...sessionClaims?.metadata,
       jobTitle: jobTitle,
       department: department,
-      ...sessionClaims?.metadata
     },
   };
 
