@@ -1,7 +1,17 @@
 import { Button, Card, Container, Group, Image, Text } from "@mantine/core";
 import { SignInButton } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const { query } = useRouter();
+  const redirectUrlParam = query.redirect_url;
+  const redirectUrl =
+    typeof redirectUrlParam === "string"
+      ? redirectUrlParam
+      : Array.isArray(redirectUrlParam)
+        ? redirectUrlParam[0]
+        : undefined;
+
   return (
     <Container size="xl">
       <Group justify="center" mt="xl">
@@ -25,7 +35,7 @@ export default function Login() {
             view your forms.
           </Text>
 
-          <SignInButton mode="modal">
+          <SignInButton mode="modal" forceRedirectUrl={redirectUrl}>
             <Button fullWidth mt="md" radius="md">
               Sign In
             </Button>
