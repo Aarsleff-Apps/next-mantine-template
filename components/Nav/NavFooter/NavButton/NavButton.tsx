@@ -1,9 +1,13 @@
-import { Flex, UnstyledButton, Text } from "@mantine/core";
+import { Flex, UnstyledButton, Text, MantineStyleProps } from "@mantine/core";
+import { TablerIcon } from "@tabler/icons-react";
 import Link from "next/link";
-import { forwardRef } from "react";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
-interface IProps extends React.ComponentPropsWithoutRef<'a'> {
-  Icon: any;
+type UnstyledButtonComponentProps = ComponentPropsWithoutRef<typeof UnstyledButton>;
+
+interface IProps
+  extends Omit<UnstyledButtonComponentProps, "children" | "component" | "href">, MantineStyleProps {
+  Icon: TablerIcon;
   label?: string;
   href: string;
 }
@@ -14,7 +18,8 @@ const NavButton = forwardRef<HTMLAnchorElement, IProps>(
       component={Link}
       href={href}
       ref={ref}
-      style={{ width: "50px", height: "50px" }}
+      style={{ width: "60px", height: "50px" }}
+      pt={2}
       {...others}
     >
       <Flex gap={0} justify="center" align="center" direction="column">
