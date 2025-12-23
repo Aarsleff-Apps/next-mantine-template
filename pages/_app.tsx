@@ -11,7 +11,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 export default function App({ Component, pageProps }: any) {
   return (
     <ClerkProvider {...pageProps}>
-      <MantineProvider defaultColorScheme="auto" theme={theme}>
+      <MantineProvider defaultColorScheme="light" theme={theme}>
         <ModalsProvider>
           <Notifications position="top-right" />
           <Head>

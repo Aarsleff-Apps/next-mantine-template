@@ -1,19 +1,14 @@
-import {
-  AppShell,
-  Group,
-  Text,
-  Burger,
-} from "@mantine/core";
+import { AppShell, Group, Text, Burger, Image } from "@mantine/core";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import SideNav from "./SideNav/SideNav";
 import { linkData } from "./SideNav/SideNav";
-//import * as Sentry from "@sentry/nextjs";
-
 import { useSession, useUser } from "@clerk/nextjs";
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
-import cx from 'clsx';
-import classes from './Nav.module.css';
+import cx from "clsx";
+import classes from "./Nav.module.css";
+import NextImage from "next/image";
+//import * as Sentry from "@sentry/nextjs";
 
 type NavigationItem = {
   label: string;
@@ -129,9 +124,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
         collapsed: { desktop: false, mobile: !opened },
       }}
     >
-      <AppShell.Header
-        className={cx(classes.navHeader)}
-      >
+      <AppShell.Header className={cx(classes.navHeader)}>
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
             <Group gap="xl">
@@ -147,6 +140,16 @@ export default function Nav({ children }: { children: React.ReactNode }) {
                 {pageTitle}
               </Text>
             </Group>
+            <Image
+              src="/web-app-manifest-512x512.png"
+              alt="Logo"
+              width={96}
+              height={96}
+              fit="contain"
+              radius="md"
+              className={classes.logo}
+              component={NextImage}
+            />
           </Group>
         </Group>
       </AppShell.Header>
