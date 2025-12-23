@@ -13,12 +13,12 @@ import { UserButton } from './UserButton/UserButton';
 import classes from './SideNav.module.css';
 
 export const linkData = [
-  { label: 'Home', icon: IconHome, link: '/' },
+  { label: 'Home', icon: IconHome, link: '/test' },
   {
     label: 'Market news',
     icon: IconNotes,
     links: [
-      { label: 'Overview', link: '/new/overview' },
+      { label: 'Home', link: '/' },
       { label: 'Forecasts', link: '/new/forecasts' },
       { label: 'Outlook', link: '/new/outlook' },
       { label: 'Real time', link: '/new/real-time' },

@@ -29,6 +29,17 @@
   }
 }
 
+.activeControl {
+  background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6));
+  color: light-dark(var(--mantine-color-blue-8), var(--mantine-color-blue-1));
+}
+
+.activeLink {
+  background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6));
+  color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-1));
+  border-left-color: light-dark(var(--mantine-color-blue-4), var(--mantine-color-blue-6));
+}
+
 .chevron {
   transition: transform 200ms ease;
 }
