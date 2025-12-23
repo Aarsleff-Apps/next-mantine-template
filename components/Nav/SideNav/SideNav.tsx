@@ -12,26 +12,25 @@ import { LinksGroup } from './NavbarLinksGroup/NavbarLinksGroup';
 import { UserButton } from './UserButton/UserButton';
 import classes from './SideNav.module.css';
 
-const mockdata = [
-  { label: 'Dashboard', icon: IconGauge },
+const linkData = [
+  { label: 'Dashboard', icon: IconGauge, link: '/dash' },
   {
     label: 'Market news',
     icon: IconNotes,
-    initiallyOpened: true,
     links: [
-      { label: 'Overview', link: '/' },
-      { label: 'Forecasts', link: '/' },
-      { label: 'Outlook', link: '/' },
-      { label: 'Real time', link: '/' },
+      { label: 'Overview', link: '#' },
+      { label: 'Forecasts', link: '#' },
+      { label: 'Outlook', link: '#' },
+      { label: 'Real time', link: '#' },
     ],
   },
   {
     label: 'Releases',
     icon: IconCalendarStats,
     links: [
-      { label: 'Upcoming releases', link: '/' },
-      { label: 'Previous releases', link: '/' },
-      { label: 'Releases schedule', link: '/' },
+      { label: 'Upcoming releases', link: '#' },
+      { label: 'Previous releases', link: '#' },
+      { label: 'Releases schedule', link: '#' },
     ],
   },
   { label: 'Analytics', icon: IconPresentationAnalytics },
@@ -41,15 +40,15 @@ const mockdata = [
     label: 'Security',
     icon: IconLock,
     links: [
-      { label: 'Enable 2FA', link: '/' },
-      { label: 'Change password', link: '/' },
-      { label: 'Recovery codes', link: '/' },
+      { label: 'Enable 2FA', link: '#' },
+      { label: 'Change password', link: '#' },
+      { label: 'Recovery codes', link: '#' },
     ],
   },
 ];
 
 export default function SideNav() {
-  const links = mockdata.map((item) => <LinksGroup {...item} key={item.label} />);
+  const links = linkData.map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (
     <nav className={classes.navbar}>
