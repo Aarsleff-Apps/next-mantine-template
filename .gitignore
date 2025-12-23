@@ -135,3 +135,5 @@ dist
 # Serwist
 public/sw*
 public/swe-worker*
+
+next-env.d.ts
