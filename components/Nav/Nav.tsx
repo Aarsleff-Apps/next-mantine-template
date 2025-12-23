@@ -12,6 +12,8 @@ import { linkData } from "./SideNav/SideNav";
 import { useSession, useUser } from "@clerk/nextjs";
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
+import cx from 'clsx';
+import classes from './Nav.module.css';
 
 type NavigationItem = {
   label: string;
@@ -128,9 +130,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
       }}
     >
       <AppShell.Header
-        style={{
-          background: "linear-gradient(to right, #ffffffff 20%, #005fae 70%)",
-        }}
+        className={cx(classes.navHeader)}
       >
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
@@ -143,7 +143,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
                   color="#000000ff"
                 />
               )}
-              <Text ta="left" fw={500} c="#000000ff">
+              <Text ta="left" fw={500}>
                 {pageTitle}
               </Text>
             </Group>

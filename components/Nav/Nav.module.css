@@ -12,23 +12,12 @@
   }
 }
 
-.dark {
+.navHeader {
   @mixin dark {
-    display: none;
+    background: linear-gradient(to right, #2E2E2E 20%, #005fae 70%);
   }
-
   @mixin light {
-    display: block;
-  }
-}
-
-.light {
-  @mixin light {
-    display: none;
-  }
-
-  @mixin dark {
-    display: block;
+    background: linear-gradient(to right, #ffffffff 20%, #005fae 70%);
   }
 }
 
