@@ -2,7 +2,7 @@ import {
   IconAdjustments,
   IconCalendarStats,
   IconFileAnalytics,
-  IconGauge,
+  IconHome,
   IconLock,
   IconNotes,
   IconPresentationAnalytics,
@@ -12,25 +12,25 @@ import { LinksGroup } from './NavbarLinksGroup/NavbarLinksGroup';
 import { UserButton } from './UserButton/UserButton';
 import classes from './SideNav.module.css';
 
-const linkData = [
-  { label: 'Dashboard', icon: IconGauge, link: '/dash' },
+export const linkData = [
+  { label: 'Home', icon: IconHome, link: '/' },
   {
     label: 'Market news',
     icon: IconNotes,
     links: [
-      { label: 'Overview', link: '#' },
-      { label: 'Forecasts', link: '#' },
-      { label: 'Outlook', link: '#' },
-      { label: 'Real time', link: '#' },
+      { label: 'Overview', link: '/new/overview' },
+      { label: 'Forecasts', link: '/new/forecasts' },
+      { label: 'Outlook', link: '/new/outlook' },
+      { label: 'Real time', link: '/new/real-time' },
     ],
   },
   {
     label: 'Releases',
     icon: IconCalendarStats,
     links: [
-      { label: 'Upcoming releases', link: '#' },
-      { label: 'Previous releases', link: '#' },
-      { label: 'Releases schedule', link: '#' },
+      { label: 'Upcoming releases', link: '/releases/upcoming' },
+      { label: 'Previous releases', link: '/releases/previous' },
+      { label: 'Releases schedule', link: '/releases/schedule' },
     ],
   },
   { label: 'Analytics', icon: IconPresentationAnalytics },
@@ -40,9 +40,9 @@ const linkData = [
     label: 'Security',
     icon: IconLock,
     links: [
-      { label: 'Enable 2FA', link: '#' },
-      { label: 'Change password', link: '#' },
-      { label: 'Recovery codes', link: '#' },
+      { label: 'Enable 2FA', link: '/security/2fa' },
+      { label: 'Change password', link: '/security/change-password' },
+      { label: 'Recovery codes', link: '/security/recovery-codes' },
     ],
   },
 ];

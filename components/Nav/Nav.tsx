@@ -6,16 +6,89 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import SideNav from "./SideNav/SideNav";
+import { linkData } from "./SideNav/SideNav";
 //import * as Sentry from "@sentry/nextjs";
 
 import { useSession, useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/router";
+
+type NavigationItem = {
+  label: string;
+  link?: string;
+  links?: { label: string; link: string }[];
+};
+
+const normalizePath = (path: string) => {
+  const stripped = (path || "").split("#")[0].split("?")[0].replace(/\/+$/, "");
+  return stripped === "" ? "/" : stripped;
+};
+
+const buildLinkLabelMap = (items: NavigationItem[]) => {
+  const map = new Map<string, string>();
+
+  items.forEach((item) => {
+    if (item.link) {
+      map.set(normalizePath(item.link), item.label);
+    }
+    item.links?.forEach((child) => {
+      if (child.link) {
+        map.set(normalizePath(child.link), child.label);
+      }
+    });
+  });
+
+  return map;
+};
+
+const resolvePageTitle = (path: string, labelMap: Map<string, string>) => {
+  const normalizedPath = normalizePath(path);
+  const directMatch = labelMap.get(normalizedPath);
+
+  if (directMatch) {
+    return directMatch;
+  }
+
+  let bestLabel = "";
+  let bestMatchLength = 0;
+
+  labelMap.forEach((label, linkPath) => {
+    if (
+      linkPath !== "/" &&
+      normalizedPath.startsWith(linkPath) &&
+      linkPath.length > bestMatchLength
+    ) {
+      bestLabel = label;
+      bestMatchLength = linkPath.length;
+    }
+  });
+
+  if (bestLabel) {
+    return bestLabel;
+  }
+
+  if (normalizedPath === "/") {
+    return "Home";
+  }
+
+  return normalizedPath
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+};
 
 export default function Nav({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
   const { width } = useViewportSize();
   const { isLoaded, user } = useUser();
   const { session } = useSession();
+  const router = useRouter();
+  const labelMap = useMemo(() => buildLinkLabelMap(linkData), []);
+  const pageTitle = useMemo(
+    () => resolvePageTitle(router.asPath || router.pathname, labelMap),
+    [labelMap, router.asPath, router.pathname]
+  );
 
   // if (isLoaded) {
   //   Sentry.setUser({
@@ -71,7 +144,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
                 />
               )}
               <Text ta="left" fw={500} c="#000000ff">
-                pageTitle
+                {pageTitle}
               </Text>
             </Group>
           </Group>
