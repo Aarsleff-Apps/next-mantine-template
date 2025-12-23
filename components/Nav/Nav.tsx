@@ -1,26 +1,23 @@
 import {
   AppShell,
   Group,
-  Image,
+  Text,
   useMantineColorScheme,
   useComputedColorScheme,
+  Burger,
 } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
-import NextImage from "next/image";
-import AarsleffLogo from "/public/Aarsleff Logo.png";
-import AarsleffLogoWhite from "/public/Aarsleff Logo White.png";
+import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import classes from "./Nav.module.css";
 import cx from "clsx";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import SideNav from "./SideNav/SideNav";
 //import * as Sentry from "@sentry/nextjs";
 
-import confetti from "canvas-confetti";
 import { useAuth, UserButton, useSession, useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
-import NavFooter from "./NavFooter/NavFooter";
 
 export default function Nav({ children }: { children: React.ReactNode }) {
+  const [opened, { toggle }] = useDisclosure();
   const { width } = useViewportSize();
   const { isLoaded, user } = useUser();
   const { isSignedIn } = useAuth();
@@ -32,14 +29,6 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   //     name: user?.fullName,
   //   });
   // }
-
-  function fireConfetti() {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
-  }
 
   //update usermetadata
   useEffect(() => {
@@ -66,35 +55,33 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   return (
     <AppShell
       padding="md"
-      header={{ height: 60, collapsed: width < 1024 }}
-      footer={{ height: 75, collapsed: width >= 1024 || !isSignedIn }}
+      header={{ height: 60 }}
       navbar={{
-        width: 80,
+        width: 270,
         breakpoint: 1024,
-        collapsed: { desktop: !isSignedIn, mobile: true },
+        collapsed: { desktop: false, mobile: !opened },
       }}
     >
-      <AppShell.Header>
+      <AppShell.Header
+        style={{
+          background: "linear-gradient(to right, #ffffffff 20%, #005fae 70%)",
+        }}
+      >
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Image
-              component={NextImage}
-              src={AarsleffLogo}
-              alt="My image"
-              h={30}
-              w="auto"
-              className={cx(classes.dark)}
-              onClick={() => fireConfetti()}
-            />
-            <Image
-              component={NextImage}
-              src={AarsleffLogoWhite}
-              alt="My image"
-              h={30}
-              w="auto"
-              className={cx(classes.light)}
-              onClick={() => fireConfetti()}
-            />
+            <Group gap="xl">
+              {width! < 1024 && (
+                <Burger
+                  opened={opened}
+                  onClick={toggle}
+                  size="sm"
+                  color="#000000ff"
+                />
+              )}
+              <Text ta="left" fw={500} c="#000000ff">
+                pageTitle
+              </Text>
+            </Group>
             {isSignedIn ? (
               <div id="UserAvatar">
                 <UserButton>
@@ -134,9 +121,6 @@ export default function Nav({ children }: { children: React.ReactNode }) {
         <SideNav />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
-      <AppShell.Footer id="footer">
-        <NavFooter />
-      </AppShell.Footer>
     </AppShell>
   );
 }
