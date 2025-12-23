@@ -1,4 +1,10 @@
-import { IconChevronRight, IconLogout, IconMoon, IconSun } from "@tabler/icons-react";
+import {
+  IconChevronUp,
+  IconChevronRight,
+  IconLogout,
+  IconMoon,
+  IconSun,
+} from "@tabler/icons-react";
 import {
   Avatar,
   Group,
@@ -47,7 +53,7 @@ export function UserButton() {
   }
 
   return (
-    <Menu width={220} position="right-start" withArrow shadow="md">
+    <Menu width={220} position="top" withArrow shadow="md">
       <Menu.Target>
         <UnstyledButton className={classes.user}>
           <Group>
@@ -66,7 +72,7 @@ export function UserButton() {
               </Text>
             </div>
 
-            <IconChevronRight size={14} stroke={1.5} />
+            <IconChevronUp size={14} stroke={1.5} />
           </Group>
         </UnstyledButton>
       </Menu.Target>
@@ -75,16 +81,26 @@ export function UserButton() {
         <Menu.Label>Preferences</Menu.Label>
         <Menu.Item
           leftSection={
-            computedColorScheme === "light" ? <IconMoon size={16} /> : <IconSun size={16} />
+            computedColorScheme === "light" ? (
+              <IconMoon size={16} />
+            ) : (
+              <IconSun size={16} />
+            )
           }
           onClick={toggleColorScheme}
         >
-          {computedColorScheme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          {computedColorScheme === "light"
+            ? "Switch to dark mode"
+            : "Switch to light mode"}
         </Menu.Item>
 
         <Menu.Divider />
         <Menu.Label>Account</Menu.Label>
-        <Menu.Item leftSection={<IconLogout size={16} />} onClick={handleSignOut} color="red">
+        <Menu.Item
+          leftSection={<IconLogout size={16} />}
+          onClick={handleSignOut}
+          color="red"
+        >
           Sign out
         </Menu.Item>
       </Menu.Dropdown>
