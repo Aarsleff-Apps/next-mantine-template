@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+// import * as Sentry from "@sentry/nextjs";
 import { Flex, rem, Tooltip, UnstyledButton, Text } from "@mantine/core";
 import { IconSpeakerphone } from "@tabler/icons-react";
 import classes from "./FeedbackButton.module.css";
@@ -11,9 +11,9 @@ interface Iprops {
 export default function FeedbackButton({ type }: Iprops) {
   const [feedback, setFeedback] = useState<any | undefined>(undefined);
   // Read `getFeedback` on the client only, to avoid hydration errors during server rendering
-  useEffect(() => {
-    setFeedback(Sentry.getFeedback());
-  }, []);
+  // useEffect(() => {
+  //   setFeedback(Sentry.getFeedback());
+  // }, []);
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 

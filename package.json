@@ -9,7 +9,7 @@
     "lint": "npx next typegen && next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.18.0",
+    "@clerk/nextjs": "^6.36.5",
     "@mantine/core": "8.3.10",
     "@mantine/dates": "8.3.10",
     "@mantine/hooks": "8.3.10",
@@ -21,8 +21,8 @@
     "canvas-confetti": "^1.9.3",
     "dayjs": "^1.11.13",
     "next": "15.5.3",
-    "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "react": "19.1.4",
+    "react-dom": "19.1.4"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1",
@@ -30,7 +30,7 @@
     "@types/react": "19.1.13",
     "@types/react-dom": "19.1.9",
     "eslint": "9.35.0",
-    "eslint-config-next": "15.5.3",
+    "eslint-config-next": "15.5.9",
     "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "1.18.0",

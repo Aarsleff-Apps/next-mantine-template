@@ -1,30 +1,91 @@
-import {
-  AppShell,
-  Group,
-  Image,
-  useMantineColorScheme,
-  useComputedColorScheme,
-} from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
-import NextImage from "next/image";
-import AarsleffLogo from "/public/Aarsleff Logo.png";
-import AarsleffLogoWhite from "/public/Aarsleff Logo White.png";
-import classes from "./Nav.module.css";
-import cx from "clsx";
-import { IconMoon, IconSun } from "@tabler/icons-react";
+import { AppShell, Group, Text, Burger, Image } from "@mantine/core";
+import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import SideNav from "./SideNav/SideNav";
+import { linkData } from "./SideNav/SideNav";
+import { useSession, useUser } from "@clerk/nextjs";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/router";
+import cx from "clsx";
+import classes from "./Nav.module.css";
+import NextImage from "next/image";
 //import * as Sentry from "@sentry/nextjs";
 
-import confetti from "canvas-confetti";
-import { useAuth, UserButton, useSession, useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
-import NavFooter from "./NavFooter/NavFooter";
+type NavigationItem = {
+  label: string;
+  link?: string;
+  links?: { label: string; link: string }[];
+};
+
+const normalizePath = (path: string) => {
+  const stripped = (path || "").split("#")[0].split("?")[0].replace(/\/+$/, "");
+  return stripped === "" ? "/" : stripped;
+};
+
+const buildLinkLabelMap = (items: NavigationItem[]) => {
+  const map = new Map<string, string>();
+
+  items.forEach((item) => {
+    if (item.link) {
+      map.set(normalizePath(item.link), item.label);
+    }
+    item.links?.forEach((child) => {
+      if (child.link) {
+        map.set(normalizePath(child.link), child.label);
+      }
+    });
+  });
+
+  return map;
+};
+
+const resolvePageTitle = (path: string, labelMap: Map<string, string>) => {
+  const normalizedPath = normalizePath(path);
+  const directMatch = labelMap.get(normalizedPath);
+
+  if (directMatch) {
+    return directMatch;
+  }
+
+  let bestLabel = "";
+  let bestMatchLength = 0;
+
+  labelMap.forEach((label, linkPath) => {
+    if (
+      linkPath !== "/" &&
+      normalizedPath.startsWith(linkPath) &&
+      linkPath.length > bestMatchLength
+    ) {
+      bestLabel = label;
+      bestMatchLength = linkPath.length;
+    }
+  });
+
+  if (bestLabel) {
+    return bestLabel;
+  }
+
+  if (normalizedPath === "/") {
+    return "Home";
+  }
+
+  return normalizedPath
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+};
 
 export default function Nav({ children }: { children: React.ReactNode }) {
+  const [opened, { toggle }] = useDisclosure();
   const { width } = useViewportSize();
   const { isLoaded, user } = useUser();
-  const { isSignedIn } = useAuth();
   const { session } = useSession();
+  const router = useRouter();
+  const labelMap = useMemo(() => buildLinkLabelMap(linkData), []);
+  const pageTitle = useMemo(
+    () => resolvePageTitle(router.asPath || router.pathname, labelMap),
+    [labelMap, router.asPath, router.pathname]
+  );
 
   // if (isLoaded) {
   //   Sentry.setUser({
@@ -32,14 +93,6 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   //     name: user?.fullName,
   //   });
   // }
-
-  function fireConfetti() {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-    });
-  }
 
   //update usermetadata
   useEffect(() => {
@@ -60,73 +113,43 @@ export default function Nav({ children }: { children: React.ReactNode }) {
       updateUserMetadata();
     }
   }, [isLoaded]);
-  const { setColorScheme } = useMantineColorScheme();
-  const computedColorScheme = useComputedColorScheme();
 
   return (
     <AppShell
       padding="md"
-      header={{ height: 60, collapsed: width < 1024 }}
-      footer={{ height: 75, collapsed: width >= 1024 || !isSignedIn }}
+      header={{ height: 60 }}
       navbar={{
-        width: 80,
+        width: 270,
         breakpoint: 1024,
-        collapsed: { desktop: !isSignedIn, mobile: true },
+        collapsed: { desktop: false, mobile: !opened },
       }}
     >
-      <AppShell.Header>
+      <AppShell.Header className={cx(classes.navHeader)}>
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
+            <Group gap="xl">
+              {width! < 1024 && (
+                <Burger
+                  opened={opened}
+                  onClick={toggle}
+                  size="sm"
+                  color="#000000ff"
+                />
+              )}
+              <Text ta="left" fw={500}>
+                {pageTitle}
+              </Text>
+            </Group>
             <Image
+              src="/web-app-manifest-512x512.png"
+              alt="Logo"
+              width={96}
+              height={96}
+              fit="contain"
+              radius="md"
+              className={classes.logo}
               component={NextImage}
-              src={AarsleffLogo}
-              alt="My image"
-              h={30}
-              w="auto"
-              className={cx(classes.dark)}
-              onClick={() => fireConfetti()}
             />
-            <Image
-              component={NextImage}
-              src={AarsleffLogoWhite}
-              alt="My image"
-              h={30}
-              w="auto"
-              className={cx(classes.light)}
-              onClick={() => fireConfetti()}
-            />
-            {isSignedIn ? (
-              <div id="UserAvatar">
-                <UserButton>
-                  <UserButton.MenuItems>
-                    <UserButton.Action
-                      label={
-                        computedColorScheme === "light"
-                          ? "Dark Mode"
-                          : "Light Mode"
-                      }
-                      labelIcon={
-                        <>
-                          <IconSun
-                            className={cx(classes.light, classes.icon)}
-                            style={{ marginTop: -5 }}
-                          />
-                          <IconMoon
-                            className={cx(classes.dark, classes.icon)}
-                            style={{ marginTop: -5 }}
-                          />
-                        </>
-                      }
-                      onClick={() =>
-                        setColorScheme(
-                          computedColorScheme === "light" ? "dark" : "light"
-                        )
-                      }
-                    />
-                  </UserButton.MenuItems>
-                </UserButton>
-              </div>
-            ) : null}
           </Group>
         </Group>
       </AppShell.Header>
@@ -134,9 +157,6 @@ export default function Nav({ children }: { children: React.ReactNode }) {
         <SideNav />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
-      <AppShell.Footer id="footer">
-        <NavFooter />
-      </AppShell.Footer>
     </AppShell>
   );
 }
