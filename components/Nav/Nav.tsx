@@ -8,9 +8,10 @@ import cx from "clsx";
 
 import confetti from "canvas-confetti";
 import { useAuth, useSession, useUser } from "@clerk/nextjs";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/router";
 import { IconTestPipe } from "@tabler/icons-react";
+import { useThrottledUserMetadataUpdate } from "@/lib/updateUserMetadata";
 
 type NavigationItem = {
   label: string;
@@ -115,25 +116,11 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   }
 
   //update usermetadata
-  useEffect(() => {
-    async function updateUserMetadata() {
-      const photo = await fetch(
-        `/api/updateUserMetadata?user=${user?.primaryEmailAddress?.emailAddress}`,
-      );
-      if (!photo.ok) {
-        console.error("Failed to update user metadata");
-        return;
-      }
-      const data = await photo.blob();
-      if (data.type == "application/json") return;
-    }
-    // check if updatedAt was within the last 30 seconds
-    const now = new Date();
-    const thirtySecondsAgo = new Date(now.getTime() - 15 * 1000);
-    if (session?.updatedAt && session.updatedAt > thirtySecondsAgo) {
-      updateUserMetadata();
-    }
-  }, [isLoaded]);
+  useThrottledUserMetadataUpdate({
+    isLoaded,
+    sessionUpdatedAt: session?.updatedAt,
+    user,
+  });
 
   return (
     <AppShell
