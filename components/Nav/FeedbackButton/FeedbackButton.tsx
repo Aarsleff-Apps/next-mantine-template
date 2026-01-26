@@ -1,14 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 // import * as Sentry from "@sentry/nextjs";
-import { Flex, rem, Tooltip, UnstyledButton, Text } from "@mantine/core";
 import { IconSpeakerphone } from "@tabler/icons-react";
-import classes from "./FeedbackButton.module.css";
+import { LinksGroup } from "../SideNav/NavbarLinksGroup/NavbarLinksGroup";
 
-interface Iprops {
-  type: "SideNav" | "NavFooter";
-}
-
-export default function FeedbackButton({ type }: Iprops) {
+export default function FeedbackButton() {
   const [feedback, setFeedback] = useState<any | undefined>(undefined);
   // Read `getFeedback` on the client only, to avoid hydration errors during server rendering
   // useEffect(() => {
@@ -37,31 +32,7 @@ export default function FeedbackButton({ type }: Iprops) {
     return () => {};
   }, [feedback]);
 
-  if (type === "SideNav")
-    return (
-      <Tooltip
-        label={"Send Feedback"}
-        position="right"
-        transitionProps={{ duration: 0 }}
-      >
-        <UnstyledButton className={classes.link} ref={buttonRef}>
-          <IconSpeakerphone
-            style={{ width: rem(20), height: rem(20) }}
-            stroke={1.5}
-          />
-        </UnstyledButton>
-      </Tooltip>
-    );
-
-  if (type === "NavFooter")
-    return (
-      <UnstyledButton ref={buttonRef} style={{ width: "60px", height: "50px" }}>
-        <Flex gap={0} justify="center" align="center" direction="column">
-          <IconSpeakerphone style={{ width: 25, height: 25 }} stroke={1.5} />
-          <Text fw={200} size="sm">
-            Feedback
-          </Text>
-        </Flex>
-      </UnstyledButton>
-    );
+  return (
+    <LinksGroup icon={IconSpeakerphone} label={"Feedback"} ref={buttonRef} />
+  );
 }

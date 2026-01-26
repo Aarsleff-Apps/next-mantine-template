@@ -1,65 +1,136 @@
 import {
-  IconAdjustments,
-  IconCalendarStats,
-  IconFileAnalytics,
+  IconApps,
+  IconDatabase,
+  IconHelp,
   IconHome,
   IconLock,
   IconNotes,
-  IconPresentationAnalytics,
-} from '@tabler/icons-react';
-import { ScrollArea } from '@mantine/core';
-import { LinksGroup } from './NavbarLinksGroup/NavbarLinksGroup';
-import { UserButton } from './UserButton/UserButton';
-import classes from './SideNav.module.css';
+  IconUser,
+} from "@tabler/icons-react";
+import { ScrollArea } from "@mantine/core";
+import { useAuth, useUser } from "@clerk/nextjs";
+import {
+  LinksGroup,
+  type LinksGroupProps,
+} from "./NavbarLinksGroup/NavbarLinksGroup";
+import { UserButton } from "./UserButton/UserButton";
+import classes from "./SideNav.module.css";
+import HelpModal from "../HelpModal/HelpModal";
+import { useDisclosure } from "@mantine/hooks";
+import FeedbackButton from "../FeedbackButton/FeedbackButton";
 
-export const linkData = [
-  { label: 'Home', icon: IconHome, link: '/test' },
-  {
-    label: 'Market news',
-    icon: IconNotes,
-    links: [
-      { label: 'Home', link: '/' },
-      { label: 'Forecasts', link: '/new/forecasts' },
-      { label: 'Outlook', link: '/new/outlook' },
-      { label: 'Real time', link: '/new/real-time' },
-    ],
-  },
-  {
-    label: 'Releases',
-    icon: IconCalendarStats,
-    links: [
-      { label: 'Upcoming releases', link: '/releases/upcoming' },
-      { label: 'Previous releases', link: '/releases/previous' },
-      { label: 'Releases schedule', link: '/releases/schedule' },
-    ],
-  },
-  { label: 'Analytics', icon: IconPresentationAnalytics },
-  { label: 'Contracts', icon: IconFileAnalytics },
-  { label: 'Settings', icon: IconAdjustments },
-  {
-    label: 'Security',
-    icon: IconLock,
-    links: [
-      { label: 'Enable 2FA', link: '/security/2fa' },
-      { label: 'Change password', link: '/security/change-password' },
-      { label: 'Recovery codes', link: '/security/recovery-codes' },
-    ],
-  },
-];
+export const createLinkData = (
+  email?: string | null,
+  admin?: boolean | null,
+  userAdmin?: boolean | null,
+  onHelpClick?: () => void,
+): LinksGroupProps[] => {
+  const briefingLink = email?.includes("centrumpile.co.uk")
+    ? "/forms/BriefingRegisterCentrum"
+    : "/forms/BriefingRegister";
+
+  const timesheetName = () => {
+    switch (email?.split("@")?.[1]) {
+      case "cannonpiling.com":
+        return "Cannon Timesheet";
+      default:
+        return "AarTime";
+    }
+  };
+
+  const timesheetLink = () => {
+    switch (email?.split("@")?.[1]) {
+      case "cannonpiling.com":
+        return "https://timesheet.cannonpiling.com/";
+      default:
+        return "https://aartime.aarsleff.co.uk";
+    }
+  };
+
+  const links: LinksGroupProps[] = [
+    { label: "Home", icon: IconHome, link: "/" },
+    {
+      label: "Forms",
+      icon: IconNotes,
+      forceOpen: true,
+      links: [
+        { label: "Goods Received", link: "/forms/egr" },
+        { label: "Briefing Register", link: briefingLink },
+        { label: "Goods Returned", link: "/forms/GoodsReturned" },
+        { label: "Site Paperwork", link: "/forms/SitePaperwork" },
+        { label: "Vehicle Checks", link: "/forms/VehicleChecks" },
+      ],
+    },
+    { label: "Data", icon: IconDatabase, link: "/data" },
+  ];
+
+  if (admin) {
+    links.push({
+      label: "Admin",
+      icon: IconLock,
+      forceOpen: false,
+      links: [
+        { label: "Vehicle Users", link: "/vehicle-users" },
+        { label: "Export", link: "/export" },
+        { label: "Stats", link: "/stats" },
+      ],
+    });
+  }
+
+  if (userAdmin) {
+    links.push({ label: "Users", icon: IconUser, link: "/users" });
+  }
+
+  links.push(
+    {
+      label: "Other Apps",
+      icon: IconApps,
+      links: [
+        { label: timesheetName(), link: timesheetLink() },
+        {
+          label: "AarCompliance",
+          link: "https://aarcompliance.aarsleff.co.uk",
+        },
+        { label: "AarAudit", link: "https://aaraudit.aarsleff.co.uk" },
+        {
+          label: "SRW Production",
+          link: "https://aar-production-srw.vercel.app",
+        },
+      ],
+    },
+    { label: "Help", icon: IconHelp, onClick: onHelpClick },
+  );
+
+  return links;
+};
 
 export default function SideNav() {
-  const links = linkData.map((item) => <LinksGroup {...item} key={item.label} />);
+  const { user } = useUser();
+  const { sessionClaims } = useAuth();
+  const [opened, { open, close }] = useDisclosure(false);
+  const linkData = createLinkData(
+    user?.primaryEmailAddress?.emailAddress,
+    sessionClaims?.metadata?.admin,
+    sessionClaims?.metadata?.user_admin,
+    open,
+  );
+  const links = linkData.map((item) => (
+    <LinksGroup {...item} key={item.label} />
+  ));
 
   return (
     <nav className={classes.navbar}>
-
       <ScrollArea className={classes.links}>
-        <div className={classes.linksInner}>{links}</div>
+        <div className={classes.linksInner}>
+          {links}
+          <FeedbackButton />
+        </div>
       </ScrollArea>
 
       <div className={classes.footer}>
         <UserButton />
       </div>
+      <HelpModal opened={opened} close={close} />
     </nav>
   );
 }

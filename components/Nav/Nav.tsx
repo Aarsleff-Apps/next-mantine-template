@@ -1,14 +1,16 @@
-import { AppShell, Group, Text, Burger, Image } from "@mantine/core";
+import { AppShell, Group, Burger, Text } from "@mantine/core";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
+import classes from "./Nav.module.css";
 import SideNav from "./SideNav/SideNav";
-import { linkData } from "./SideNav/SideNav";
-import { useSession, useUser } from "@clerk/nextjs";
+import { createLinkData } from "./SideNav/SideNav";
+// import * as Sentry from "@sentry/nextjs";
+import cx from "clsx";
+
+import confetti from "canvas-confetti";
+import { useAuth, useSession, useUser } from "@clerk/nextjs";
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
-import cx from "clsx";
-import classes from "./Nav.module.css";
-import NextImage from "next/image";
-//import * as Sentry from "@sentry/nextjs";
+import { IconTestPipe } from "@tabler/icons-react";
 
 type NavigationItem = {
   label: string;
@@ -79,12 +81,22 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
   const { width } = useViewportSize();
   const { isLoaded, user } = useUser();
+  const { sessionClaims } = useAuth();
   const { session } = useSession();
   const router = useRouter();
-  const labelMap = useMemo(() => buildLinkLabelMap(linkData), []);
+  const linkData = useMemo(
+    () =>
+      createLinkData(
+        user?.primaryEmailAddress?.emailAddress,
+        sessionClaims?.metadata?.admin,
+        sessionClaims?.metadata?.user_admin,
+      ),
+    [user?.primaryEmailAddress?.emailAddress, sessionClaims],
+  );
+  const labelMap = useMemo(() => buildLinkLabelMap(linkData), [linkData]);
   const pageTitle = useMemo(
     () => resolvePageTitle(router.asPath || router.pathname, labelMap),
-    [labelMap, router.asPath, router.pathname]
+    [labelMap, router.asPath, router.pathname],
   );
 
   // if (isLoaded) {
@@ -94,17 +106,26 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   //   });
   // }
 
+  function fireConfetti() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  }
+
   //update usermetadata
   useEffect(() => {
     async function updateUserMetadata() {
       const photo = await fetch(
-        `/api/updateUserMetadata?user=${user?.primaryEmailAddress?.emailAddress}`
+        `/api/updateUserMetadata?user=${user?.primaryEmailAddress?.emailAddress}`,
       );
       if (!photo.ok) {
         console.error("Failed to update user metadata");
+        return;
       }
       const data = await photo.blob();
-      await user?.setProfileImage({ file: data });
+      if (data.type == "application/json") return;
     }
     // check if updatedAt was within the last 30 seconds
     const now = new Date();
@@ -137,18 +158,14 @@ export default function Nav({ children }: { children: React.ReactNode }) {
                 />
               )}
               <Text ta="left" fw={500}>
-                {pageTitle}
+                AarTemplate - {pageTitle}
               </Text>
             </Group>
-            <Image
-              src="/web-app-manifest-512x512.png"
-              alt="Logo"
-              width={96}
-              height={96}
-              fit="contain"
-              radius="md"
-              className={classes.logo}
-              component={NextImage}
+            <IconTestPipe
+              width={32}
+              height={32}
+              color="#ffffff"
+              onClick={fireConfetti}
             />
           </Group>
         </Group>
