@@ -92,6 +92,10 @@ export default async function handle(
     }
   )
 
+  if (response.status === 404) {
+    return res.status(204).end();
+  }
+
   if (!response.ok) {
     const detail = await response.text();
     return res.status(502).json({ error: "Photo request failed", detail });
