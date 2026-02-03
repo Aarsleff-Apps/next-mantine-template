@@ -148,7 +148,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
                 {pageTitle}
               </Text>
             </Group>
-            <Group>
+            <Group gap="sm">
               <IconTestPipe
                 width={32}
                 height={32}
