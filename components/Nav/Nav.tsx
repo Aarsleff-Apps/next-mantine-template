@@ -145,15 +145,20 @@ export default function Nav({ children }: { children: React.ReactNode }) {
                 />
               )}
               <Text ta="left" fw={500}>
-                AarTemplate - {pageTitle}
+                {pageTitle}
               </Text>
             </Group>
-            <IconTestPipe
-              width={32}
-              height={32}
-              color="#ffffff"
-              onClick={fireConfetti}
-            />
+            <Group>
+              <IconTestPipe
+                width={32}
+                height={32}
+                color="#ffffff"
+                onClick={fireConfetti}
+              />
+              <Text ta="left" fw={500} c="white">
+                AarTemplate
+              </Text>
+            </Group>
           </Group>
         </Group>
       </AppShell.Header>
