@@ -141,7 +141,6 @@ export default function Nav({ children }: { children: React.ReactNode }) {
                   opened={opened}
                   onClick={toggle}
                   size="sm"
-                  color="#000000ff"
                 />
               )}
               <Text ta="left" fw={500}>
