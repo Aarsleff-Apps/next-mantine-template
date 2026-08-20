@@ -15,7 +15,24 @@ export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     await auth.protect();
     const { sessionClaims } = await auth();
-    if (!sessionClaims?.metadata?.appAccess?.template) {
+    let appAccess = sessionClaims?.metadata?.appAccess;
+
+    // appAccess missing entirely (not just false) means this session's app
+    // list has never been synced for this app - likely an SSO session
+    // created while signed into a different app. Re-sync once on demand
+    // instead of trusting the stale/absent claim.
+    if (appAccess?.template === undefined) {
+      const token = await (await auth()).getToken();
+      const syncRes = await fetch('https://aartravel.aarsleff.co.uk/api/sync-access', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => null);
+      if (syncRes?.ok) {
+        appAccess = (await syncRes.json()).appAccess;
+      }
+    }
+
+    if (!appAccess?.template) {
       const url = new URL('/unauthorized', req.url);
       url.searchParams.set('redirect_url', req.nextUrl.pathname + req.nextUrl.search);
       return NextResponse.redirect(url);
