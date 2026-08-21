@@ -1,13 +1,17 @@
 import { clerkClient, getAuth } from "@clerk/nextjs/server";
-import { pickPermissions } from "@/lib/permissions";
+import { pickPermissions, type TemplatePermissions } from "@/lib/permissions";
+import { decodeJwtPayload } from "@/lib/jwt";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { sessionClaims } = getAuth(req);
-  if (!sessionClaims?.metadata?.permissions?.template?.userAdmin) {
+  const token = await getAuth(req).getToken({ template: "template" });
+  const permissions = token
+    ? decodeJwtPayload<{ permissions?: TemplatePermissions }>(token).permissions
+    : undefined;
+  if (!permissions?.userAdmin) {
     return res.status(403).json({ error: "Forbidden" });
   }
 

@@ -1,5 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import { decodeJwtPayload } from '@/lib/jwt';
+import type { TemplatePermissions } from '@/lib/permissions';
 
 const isAdminRoute = createRouteMatcher(['/export(.*)']);
 const isUserAdminRoute = createRouteMatcher(['/users(.*)', '/api/users(.*)']);
@@ -38,15 +40,21 @@ export default clerkMiddleware(async (auth, req) => {
       return NextResponse.redirect(url);
     }
   }
-  // Protect all admin routes
-  if (isAdminRoute(req) && !(await auth()).sessionClaims?.metadata?.permissions?.template?.admin) {
-    const url = new URL('/', req.url);
-    return NextResponse.redirect(url);
-  }
-  // Protect user-admin routes
-  if (isUserAdminRoute(req) && !(await auth()).sessionClaims?.metadata?.permissions?.template?.userAdmin) {
-    const url = new URL('/', req.url);
-    return NextResponse.redirect(url);
+  // Protect all admin / user-admin routes
+  if (isAdminRoute(req) || isUserAdminRoute(req)) {
+    const token = await (await auth()).getToken({ template: 'template' });
+    const permissions = token
+      ? decodeJwtPayload<{ permissions?: TemplatePermissions }>(token).permissions
+      : undefined;
+
+    if (isAdminRoute(req) && !permissions?.admin) {
+      const url = new URL('/', req.url);
+      return NextResponse.redirect(url);
+    }
+    if (isUserAdminRoute(req) && !permissions?.userAdmin) {
+      const url = new URL('/', req.url);
+      return NextResponse.redirect(url);
+    }
   }
 });
 

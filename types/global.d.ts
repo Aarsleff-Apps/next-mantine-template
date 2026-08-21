@@ -5,9 +5,6 @@ export {}
 declare global {
   interface CustomJwtSessionClaims {
     metadata: {
-      permissions: {
-        template?: TemplatePermissions
-      }
       appAccess?: Record<string, boolean>
       jobTitle?: string
       department?: string

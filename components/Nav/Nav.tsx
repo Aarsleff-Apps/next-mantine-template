@@ -82,7 +82,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
   const { width } = useViewportSize();
   const { isLoaded, user } = useUser();
-  const template = useAppPermission('template');
+  const template = useAppPermission();
   const router = useRouter();
   const linkData = useMemo(
     () =>
