@@ -23,7 +23,7 @@ export default clerkMiddleware(async (auth, req) => {
     // list has never been synced for this app - likely an SSO session
     // created while signed into a different app. Re-sync once on demand
     // instead of trusting the stale/absent claim.
-    if (!appAccess) {
+    if (!appAccess?.template) {
       const token = await (await auth()).getToken();
       const syncRes = await fetch('https://aartravel.aarsleff.co.uk/api/sync-access', {
         method: 'POST',
