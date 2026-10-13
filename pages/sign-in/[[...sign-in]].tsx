@@ -86,7 +86,9 @@ export default function Login() {
               </Text>
             )}
             {enterpriseSsoIdentifier && (
-              <div>
+              <Text size="sm" c="dimmed">
+                Signing in as <b>{enterpriseSsoIdentifier}</b>
+                <br />
                 <Button
                   variant="transparent"
                   size="compact-sm"
@@ -96,7 +98,7 @@ export default function Login() {
                 >
                   Use a different email
                 </Button>
-              </div>
+              </Text>
             )}
           </div>
         </div>
