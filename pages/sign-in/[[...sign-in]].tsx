@@ -46,6 +46,23 @@ export default function Login() {
     });
   };
 
+  const startSso = (identifier: string | null) =>
+    signIn?.sso({
+      strategy: "enterprise_sso",
+      enterpriseConnectionId,
+      identifier: identifier ?? undefined,
+      redirectUrl,
+      redirectCallbackUrl: redirectUrl,
+    });
+
+  const fallbackIdentifier =
+    process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null;
+
+  const useDifferentEmail = () => {
+    clearStoredEmail();
+    if (fallbackIdentifier) startSso(fallbackIdentifier);
+  };
+
   return (
     <div className={classes.page}>
       <div className={classes.shell}>
@@ -67,15 +84,7 @@ export default function Login() {
                 !enterpriseSsoIdentifier ||
                 fetchStatus === "fetching"
               }
-              onClick={() =>
-                signIn?.sso({
-                  strategy: "enterprise_sso",
-                  enterpriseConnectionId,
-                  identifier: enterpriseSsoIdentifier ?? undefined,
-                  redirectUrl,
-                  redirectCallbackUrl: redirectUrl,
-                })
-              }
+              onClick={() => startSso(enterpriseSsoIdentifier)}
             >
               Sign in with Microsoft
             </Button>
@@ -94,7 +103,7 @@ export default function Login() {
                   size="compact-sm"
                   p={0}
                   classNames={{ root: classes.link }}
-                  onClick={clearStoredEmail}
+                  onClick={useDifferentEmail}
                 >
                   Use a different email
                 </Button>
