@@ -1,5 +1,4 @@
 import { Button, Text, Title } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { useSignIn } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -39,11 +38,6 @@ export default function Login() {
     setEnterpriseSsoIdentifier(
       process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null
     );
-    notifications.show({
-      title: "Saved email cleared",
-      message: "The stored sign-in email cookie has been deleted.",
-      color: "green",
-    });
   };
 
   const startSso = (identifier: string | null) =>
