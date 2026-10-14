@@ -1,5 +1,4 @@
-import { Box, Button, Card, Container, Group, Image, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
+import { Button, Text, Title } from "@mantine/core";
 import { useSignIn } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -7,6 +6,7 @@ import {
   clearStoredSignInIdentifier,
   getStoredSignInIdentifier,
 } from "@/lib/signInIdentifierCookie";
+import classes from "@/components/SignInPanel/SignInPanel.module.css";
 
 export default function Login() {
   const { signIn, fetchStatus } = useSignIn();
@@ -38,89 +38,74 @@ export default function Login() {
     setEnterpriseSsoIdentifier(
       process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null
     );
-    notifications.show({
-      title: "Saved email cleared",
-      message: "The stored sign-in email cookie has been deleted.",
-      color: "green",
+  };
+
+  const startSso = (identifier: string | null) =>
+    signIn?.sso({
+      strategy: "enterprise_sso",
+      enterpriseConnectionId,
+      identifier: identifier ?? undefined,
+      redirectUrl,
+      redirectCallbackUrl: redirectUrl,
     });
+
+  const fallbackIdentifier =
+    process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null;
+
+  const useDifferentEmail = () => {
+    clearStoredEmail();
+    if (fallbackIdentifier) startSso(fallbackIdentifier);
   };
 
   return (
-    <Container size="xl">
-      <Group justify="center" mt="xl">
-        <Card shadow="sm" padding="lg" radius="md" withBorder w={400}>
-          <Card.Section>
-            <Box
-              component="button"
-              type="button"
-              onClick={clearStoredEmail}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: 0,
-                border: 0,
-                background: "transparent",
-                cursor: "pointer",
-              }}
-              aria-label="Clear saved sign-in email"
+    <div className={classes.page}>
+      <div className={classes.shell}>
+        <div className={classes.card}>
+          <div className={classes.brand}>
+            <span className={classes.name}>AarTemplate</span>
+            <span className={classes.org}>Aarsleff</span>
+          </div>
+
+          <div className={classes.form}>
+            <Title order={2}>Sign in</Title>
+
+            <Button
+              fullWidth
+              size="lg"
+              classNames={{ root: classes.signIn }}
+              disabled={
+                !enterpriseConnectionId ||
+                !enterpriseSsoIdentifier ||
+                fetchStatus === "fetching"
+              }
+              onClick={() => startSso(enterpriseSsoIdentifier)}
             >
-              <Image
-                src="/secure.svg"
-                width="auto"
-                height={300}
-                fit="contain"
-                alt="Secure Login"
-                p={20}
-              />
-            </Box>
-          </Card.Section>
-          <Group justify="space-between" mt="md" mb="xs">
-            <Text fw={500}>Please sign in!</Text>
-          </Group>
-
-          <Text size="sm" c="dimmed">
-            This app is only accessible to authenticated users. Please sign
-            in to continue.
-          </Text>
-
-          <Button
-            fullWidth
-            mt="md"
-            radius="md"
-            disabled={
-              !enterpriseConnectionId ||
-              !enterpriseSsoIdentifier ||
-              fetchStatus === "fetching"
-            }
-            onClick={() =>
-              signIn?.sso({
-                strategy: "enterprise_sso",
-                enterpriseConnectionId,
-                identifier: enterpriseSsoIdentifier ?? undefined,
-                redirectUrl,
-                redirectCallbackUrl: redirectUrl,
-              })
-            }
-          >
-            Sign in with Microsoft
-          </Button>
-          {(!enterpriseConnectionId || !enterpriseSsoIdentifier) && (
-            <Text mt="xs" size="xs" c="red">
-              No saved sign-in email was found. Sign in once with the fallback
-              Clerk identifier env var, or restore the cookie.
-            </Text>
-          )}
-          <Text
-            mt={20}
-            c="dimmed"
-            size="xs"
-            component="a"
-            href="https://storyset.com/online"
-          >
-            Online illustrations by Storyset
-          </Text>
-        </Card>
-      </Group>
-    </Container>
+              Sign in with Microsoft
+            </Button>
+            {(!enterpriseConnectionId || !enterpriseSsoIdentifier) && (
+              <Text mt="xs" size="xs" c="red">
+                No saved sign-in email was found. Sign in once with the fallback
+                Clerk identifier env var, or restore the cookie.
+              </Text>
+            )}
+            {enterpriseSsoIdentifier && (
+              <Text size="sm" c="dimmed">
+                Signing in as <b>{enterpriseSsoIdentifier}</b>
+                <br />
+                <Button
+                  variant="transparent"
+                  size="compact-sm"
+                  p={0}
+                  classNames={{ root: classes.link }}
+                  onClick={useDifferentEmail}
+                >
+                  Use a different email
+                </Button>
+              </Text>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
