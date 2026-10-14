@@ -8,10 +8,11 @@ import cx from 'clsx';
 
 import confetti from 'canvas-confetti';
 import { useUser } from '@clerk/nextjs';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { IconTestPipe } from '@tabler/icons-react';
 import { useAppPermission } from '@/hooks/useAppPermission';
+import { storeSignInIdentifier } from '@/lib/signInIdentifierCookie';
 
 type NavigationItem = {
   label: string;
@@ -113,6 +114,16 @@ export default function Nav({ children }: { children: React.ReactNode }) {
       origin: { y: 0.6 },
     });
   }
+
+  useEffect(() => {
+    const email = user?.primaryEmailAddress?.emailAddress;
+
+    if (!isLoaded || !email) {
+      return;
+    }
+
+    storeSignInIdentifier(email);
+  }, [isLoaded, user?.primaryEmailAddress?.emailAddress]);
 
   return (
     <AppShell
