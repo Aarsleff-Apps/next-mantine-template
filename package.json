@@ -12,7 +12,10 @@
     "browserslist@npm:4.28.2": "^4.28.7",
     "browserslist@npm:^4.24.0": "^4.28.7",
     "baseline-browser-mapping@npm:^2.11.20": "^2.11.21",
-    "baseline-browser-mapping@npm:^2.9.19": "^2.11.21"
+    "baseline-browser-mapping@npm:^2.9.19": "^2.11.21",
+    "zod@npm:4.4.1": "^4.6.6",
+    "zod@npm:^3.25.0 || ^4.0.0": "^4.6.6",
+    "zod@npm:^4.4.3": "^4.6.6"
   },
   "scripts": {
     "dev": "concurrently -p none 'serwist build --watch' 'next dev'",
@@ -38,7 +41,7 @@
     "fumadocs-core": "16.14.3",
     "fumadocs-mdx": "15.2.3",
     "fumadocs-ui": "16.14.3",
-    "next": "16.3.8",
+    "next": "16.4.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "swr": "2.4.2"
