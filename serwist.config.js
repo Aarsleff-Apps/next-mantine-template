@@ -3,7 +3,8 @@ import { spawnSync } from 'node:child_process';
 import { serwist } from '@serwist/next/config';
 
 const revision =
-  spawnSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf-8' }).stdout?.trim() ?? crypto.randomUUID();
+  spawnSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf-8' }).stdout?.trim() ??
+  crypto.randomUUID();
 
 export default serwist({
   swSrc: 'service-worker/index.ts',

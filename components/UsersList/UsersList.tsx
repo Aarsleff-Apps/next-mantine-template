@@ -30,8 +30,7 @@ const LABEL = Object.fromEntries(
 // Read from event handlers only; a named helper keeps the lint's purity check quiet.
 const now = () => Date.now();
 
-const cx = (...names: Array<string | false | null | undefined>) =>
-  names.filter(Boolean).join(' ');
+const cx = (...names: Array<string | false | null | undefined>) => names.filter(Boolean).join(' ');
 
 /**
  * Who has which permission, as one row each. A pill is a permission: dashed is
@@ -165,10 +164,7 @@ export function UsersList({ myId }: { myId: string | null | undefined }) {
   };
 
   const shown = useMemo(
-    () =>
-      (people ?? []).filter(
-        (p) => filter === 'all' || p.isNew || p.permissions[filter as Key],
-      ),
+    () => (people ?? []).filter((p) => filter === 'all' || p.isNew || p.permissions[filter as Key]),
     [people, filter],
   );
   const listed = (people ?? []).filter((p) => !p.isNew).length;
@@ -313,8 +309,10 @@ export function UsersList({ myId }: { myId: string | null | undefined }) {
                       >
                         {working ? (
                           <Loader size={12} />
+                        ) : on || (isArmed && !on) ? (
+                          <IconCheck size={14} aria-hidden />
                         ) : (
-                          (on || (isArmed && !on)) ? <IconCheck size={14} aria-hidden /> : <IconX size={14} aria-hidden />
+                          <IconX size={14} aria-hidden />
                         )}
                         {LABEL[key]}
                       </button>

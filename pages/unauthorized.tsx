@@ -1,7 +1,7 @@
-import { Container, Group, Card, Text, Button, Loader } from "@mantine/core";
-import { useSession, useAuth } from "@clerk/nextjs";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
+import { Container, Group, Card, Text, Button, Loader } from '@mantine/core';
+import { useSession, useAuth } from '@clerk/nextjs';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 const RETRY_INTERVAL_MS = 3000;
 const MAX_RETRIES = 5;
@@ -15,11 +15,11 @@ export default function Unauthorized() {
 
   const redirectUrlParam = router.query.redirect_url;
   const redirectUrl =
-    (typeof redirectUrlParam === "string"
+    (typeof redirectUrlParam === 'string'
       ? redirectUrlParam
       : Array.isArray(redirectUrlParam)
         ? redirectUrlParam[0]
-        : undefined) ?? "/";
+        : undefined) ?? '/';
 
   useEffect(() => {
     if (sessionClaims?.metadata?.appAccess?.template) {

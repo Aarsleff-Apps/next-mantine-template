@@ -10,16 +10,14 @@
 //   TEMPLATE_CLERK_SECRET_KEY=sk_... AARAUTH_CLERK_SECRET_KEY=sk_... \
 //     node scripts/migrate-clerk-permissions.mjs [--dry-run]
 
-import { createClerkClient } from "@clerk/backend";
+import { createClerkClient } from '@clerk/backend';
 
 const sourceKey = process.env.TEMPLATE_CLERK_SECRET_KEY;
 const targetKey = process.env.AARAUTH_CLERK_SECRET_KEY;
-const dryRun = process.argv.includes("--dry-run");
+const dryRun = process.argv.includes('--dry-run');
 
 if (!sourceKey || !targetKey) {
-  console.error(
-    "Set TEMPLATE_CLERK_SECRET_KEY and AARAUTH_CLERK_SECRET_KEY env vars.",
-  );
+  console.error('Set TEMPLATE_CLERK_SECRET_KEY and AARAUTH_CLERK_SECRET_KEY env vars.');
   process.exit(1);
 }
 
@@ -46,10 +44,7 @@ function pickPermissions(template) {
   };
 }
 
-const [sourceUsers, targetUsers] = await Promise.all([
-  getAllUsers(source),
-  getAllUsers(target),
-]);
+const [sourceUsers, targetUsers] = await Promise.all([getAllUsers(source), getAllUsers(target)]);
 
 const targetByEmail = new Map(
   targetUsers.map((u) => [u.emailAddresses[0]?.emailAddress?.toLowerCase(), u]),
@@ -93,5 +88,5 @@ for (const sourceUser of sourceUsers) {
 }
 
 console.log(
-  `\n${dryRun ? "[dry run] " : ""}Migrated: ${migrated}, no permissions to migrate: ${skippedNoPerms}, no AarAuth match: ${skippedNoMatch}`,
+  `\n${dryRun ? '[dry run] ' : ''}Migrated: ${migrated}, no permissions to migrate: ${skippedNoPerms}, no AarAuth match: ${skippedNoMatch}`,
 );
