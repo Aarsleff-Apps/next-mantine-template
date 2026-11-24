@@ -22,7 +22,7 @@ This project uses the **Pages Router**, so Clerk middleware lives in `proxy.ts` 
 
 - `isPublicRoute` exempts `/sign-in`, `/sign-up`, `/api/webhooks`, `/unauthorized`.
 - Every other route: `auth.protect()` requires sign-in, then reads `sessionClaims.metadata.appAccess`.
-- **On-demand app-access sync**: because the SSO session is shared across apps, a user can be signed in without ever having synced access for *this* app, leaving `appAccess.template` `undefined`. When that happens, `proxy.ts` fetches a token and calls `POST https://aartravel.aarsleff.co.uk/api/sync-access` (external AarTravel endpoint) to pull a fresh `appAccess` before deciding access. If `appAccess.template` is still missing, the user is redirected to `/unauthorized?redirect_url=...`, which polls `session.reload()` every 3s (up to 5 tries) until access appears, then bounces back.
+- **On-demand app-access sync**: because the SSO session is shared across apps, a user can be signed in without ever having synced access for _this_ app, leaving `appAccess.template` `undefined`. When that happens, `proxy.ts` fetches a token and calls `POST https://aartravel.aarsleff.co.uk/api/sync-access` (external AarTravel endpoint) to pull a fresh `appAccess` before deciding access. If `appAccess.template` is still missing, the user is redirected to `/unauthorized?redirect_url=...`, which polls `session.reload()` every 3s (up to 5 tries) until access appears, then bounces back.
 - **Route-level permission checks**: `/export*` requires `admin`, `/users*` and `/api/users*` require `userAdmin`. Both are read from a **scoped Clerk JWT template** (see below), not the main session claims.
 
 ### `ClerkProvider` setup — `pages/_app.tsx`
@@ -39,8 +39,8 @@ Custom UI (not Clerk's `<SignIn/>` component) that calls `signIn.sso()` directly
 
 ```tsx
 signIn?.sso({
-  strategy: "enterprise_sso",
-  enterpriseConnectionId,       // NEXT_PUBLIC_CLERK_ENTERPRISE_CONNECTION_ID
+  strategy: 'enterprise_sso',
+  enterpriseConnectionId, // NEXT_PUBLIC_CLERK_ENTERPRISE_CONNECTION_ID
   identifier: enterpriseSsoIdentifier,
   redirectUrl,
   redirectCallbackUrl: redirectUrl,
@@ -82,15 +82,15 @@ Not needed for a fresh app already built on the shared instance — only for mig
 
 ### Env vars
 
-| Var | Purpose |
-|---|---|
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key for the shared AarAuth instance |
-| `CLERK_SECRET_KEY` | Clerk secret key for the shared AarAuth instance |
-| `NEXT_PUBLIC_CLERK_ENTERPRISE_CONNECTION_ID` | Enterprise SSO connection id (`samlc_...`) from the Clerk dashboard |
-| `NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER` | Default SSO identifier/domain (e.g. `sso@aarsleff.co.uk`) |
-| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | Sign-in page path |
-| `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL` | Post-sign-in redirect fallback |
-| `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` | Post-sign-up redirect fallback |
+| Var                                                      | Purpose                                                                     |
+| -------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`                      | Clerk publishable key for the shared AarAuth instance                       |
+| `CLERK_SECRET_KEY`                                       | Clerk secret key for the shared AarAuth instance                            |
+| `NEXT_PUBLIC_CLERK_ENTERPRISE_CONNECTION_ID`             | Enterprise SSO connection id (`samlc_...`) from the Clerk dashboard         |
+| `NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER`            | Default SSO identifier/domain (e.g. `sso@aarsleff.co.uk`)                   |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL`                          | Sign-in page path                                                           |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL`        | Post-sign-in redirect fallback                                              |
+| `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL`        | Post-sign-up redirect fallback                                              |
 | `TEMPLATE_CLERK_SECRET_KEY` / `AARAUTH_CLERK_SECRET_KEY` | Only used by `scripts/migrate-clerk-permissions.mjs`, not needed at runtime |
 
 `CLIENT_ID` / `CLIENT_SECRET` in `.env.example` are unused legacy vars from a pre-Clerk Entra flow — safe to ignore/remove when setting up a new app.

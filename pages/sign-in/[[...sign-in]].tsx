@@ -1,56 +1,51 @@
-import { Button, Text, Title } from "@mantine/core";
-import { useSignIn } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { Button, Text, Title } from '@mantine/core';
+import { useSignIn } from '@clerk/nextjs';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   clearStoredSignInIdentifier,
   getStoredSignInIdentifier,
-} from "@/lib/signInIdentifierCookie";
-import classes from "@/components/SignInPanel/SignInPanel.module.css";
+} from '@/lib/signInIdentifierCookie';
+import classes from '@/components/SignInPanel/SignInPanel.module.css';
 
 export default function Login() {
   const { signIn, fetchStatus } = useSignIn();
   const { query } = useRouter();
   const redirectUrlParam = query.redirect_url;
   const redirectUrl =
-    (typeof redirectUrlParam === "string"
+    (typeof redirectUrlParam === 'string'
       ? redirectUrlParam
       : Array.isArray(redirectUrlParam)
         ? redirectUrlParam[0]
-        : undefined) ?? "/";
+        : undefined) ?? '/';
 
-  const enterpriseConnectionId =
-    process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_CONNECTION_ID;
-  const [enterpriseSsoIdentifier, setEnterpriseSsoIdentifier] = useState<
-    string | null
-  >(null);
+  const enterpriseConnectionId = process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_CONNECTION_ID;
+  const [enterpriseSsoIdentifier, setEnterpriseSsoIdentifier] = useState<string | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reads browser storage, client-only
     setEnterpriseSsoIdentifier(
       getStoredSignInIdentifier() ??
         process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ??
-        null
+        null,
     );
   }, []);
 
   const clearStoredEmail = () => {
     clearStoredSignInIdentifier();
-    setEnterpriseSsoIdentifier(
-      process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null
-    );
+    setEnterpriseSsoIdentifier(process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null);
   };
 
   const startSso = (identifier: string | null) =>
     signIn?.sso({
-      strategy: "enterprise_sso",
+      strategy: 'enterprise_sso',
       enterpriseConnectionId,
       identifier: identifier ?? undefined,
       redirectUrl,
       redirectCallbackUrl: redirectUrl,
     });
 
-  const fallbackIdentifier =
-    process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null;
+  const fallbackIdentifier = process.env.NEXT_PUBLIC_CLERK_ENTERPRISE_SSO_IDENTIFIER ?? null;
 
   const useDifferentEmail = () => {
     clearStoredEmail();
@@ -74,9 +69,7 @@ export default function Login() {
               size="lg"
               classNames={{ root: classes.signIn }}
               disabled={
-                !enterpriseConnectionId ||
-                !enterpriseSsoIdentifier ||
-                fetchStatus === "fetching"
+                !enterpriseConnectionId || !enterpriseSsoIdentifier || fetchStatus === 'fetching'
               }
               onClick={() => startSso(enterpriseSsoIdentifier)}
             >
@@ -84,8 +77,8 @@ export default function Login() {
             </Button>
             {(!enterpriseConnectionId || !enterpriseSsoIdentifier) && (
               <Text mt="xs" size="xs" c="red">
-                No saved sign-in email was found. Sign in once with the fallback
-                Clerk identifier env var, or restore the cookie.
+                No saved sign-in email was found. Sign in once with the fallback Clerk identifier
+                env var, or restore the cookie.
               </Text>
             )}
             {enterpriseSsoIdentifier && (

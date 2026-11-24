@@ -4,6 +4,7 @@ import { IconSpeakerphone } from '@tabler/icons-react';
 import { LinksGroup } from '../SideNav/NavbarLinksGroup/NavbarLinksGroup';
 
 export default function FeedbackButton() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used once Sentry feedback is enabled
   const [feedback, setFeedback] = useState<any | undefined>(undefined);
   // Read `getFeedback` on the client only, to avoid hydration errors during server rendering
   // useEffect(() => {

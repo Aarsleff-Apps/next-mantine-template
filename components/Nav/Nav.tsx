@@ -87,11 +87,7 @@ export default function Nav({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const linkData = useMemo(
     () =>
-      createLinkData(
-        user?.primaryEmailAddress?.emailAddress,
-        template?.admin,
-        template?.userAdmin,
-      ),
+      createLinkData(user?.primaryEmailAddress?.emailAddress, template?.admin, template?.userAdmin),
     [user?.primaryEmailAddress?.emailAddress, template],
   );
   const labelMap = useMemo(() => buildLinkLabelMap(linkData), [linkData]);

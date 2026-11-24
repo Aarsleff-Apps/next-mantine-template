@@ -43,9 +43,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <DocsPage toc={page.data.toc}>
       <DocsTitle>{page.data.title}</DocsTitle>
-      {page.data.description ? (
-        <DocsDescription>{page.data.description}</DocsDescription>
-      ) : null}
+      {page.data.description ? <DocsDescription>{page.data.description}</DocsDescription> : null}
       <DocsBody>
         <Mdx components={defaultMdxComponents} />
       </DocsBody>

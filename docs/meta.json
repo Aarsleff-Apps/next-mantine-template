@@ -1,7 +1,4 @@
 {
   "title": "AarTemplate Docs",
-  "pages": [
-    "index",
-    "writing-docs"
-  ]
+  "pages": ["index", "writing-docs"]
 }

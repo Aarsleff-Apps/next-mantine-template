@@ -1,16 +1,9 @@
-import {
-  Card,
-  Grid,
-  Group,
-  Loader,
-  Switch,
-  Text,
-} from "@mantine/core";
-import classes from "./UserSettings.module.css";
-import { UseFormReturnType } from "@mantine/form";
-import { KeyedMutator } from "swr";
-import UsersAutocomplete from "../UsersAutocomplete/UsersAutocomplete";
-import { TEMPLATE_PERMISSIONS, type TemplatePermissions } from "@/lib/permissions";
+import { Card, Grid, Group, Loader, Switch, Text } from '@mantine/core';
+import classes from './UserSettings.module.css';
+import { UseFormReturnType } from '@mantine/form';
+import { KeyedMutator } from 'swr';
+import UsersAutocomplete from '../UsersAutocomplete/UsersAutocomplete';
+import { TEMPLATE_PERMISSIONS, type TemplatePermissions } from '@/lib/permissions';
 
 const data = Object.entries(TEMPLATE_PERMISSIONS).map(([schema, item]) => ({
   ...item,
@@ -23,25 +16,14 @@ export interface IusersForm extends TemplatePermissions {
 
 interface Iprops {
   form: UseFormReturnType<IusersForm>;
-  // eslint-disable-next-line no-unused-vars
+
   setUser: (value: string) => void;
   refreshSettings: KeyedMutator<any>;
   loading: boolean;
 }
-export default function UserSettings({
-  form,
-  setUser,
-  refreshSettings,
-  loading,
-}: Iprops) {
+export default function UserSettings({ form, setUser, refreshSettings, loading }: Iprops) {
   const items = data.map((item) => (
-    <Group
-      justify="space-between"
-      className={classes.item}
-      wrap="nowrap"
-      gap="xl"
-      key={item.title}
-    >
+    <Group justify="space-between" className={classes.item} wrap="nowrap" gap="xl" key={item.title}>
       <div>
         <Text>{item.title}</Text>
         <Text size="xs" c="dimmed">
@@ -57,7 +39,7 @@ export default function UserSettings({
           className={classes.switch}
           size="lg"
           {...form.getInputProps(item.schema, {
-            type: "checkbox",
+            type: 'checkbox',
           })}
         />
       )}

@@ -1,4 +1,4 @@
-import { fetcher } from "@/lib/fetcher";
+import { fetcher } from '@/lib/fetcher';
 import {
   Avatar,
   Group,
@@ -8,12 +8,11 @@ import {
   Select,
   SelectProps,
   MultiSelect,
-} from "@mantine/core";
-import { UseFormReturnType } from "@mantine/form";
-import useSWR from "swr";
-import { useState } from "react";
-import { getInitials } from "@/lib/getInitials";
-
+} from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import useSWR from 'swr';
+import { useState } from 'react';
+import { getInitials } from '@/lib/getInitials';
 
 interface Iprops<T> {
   form: UseFormReturnType<T>;
@@ -22,7 +21,7 @@ interface Iprops<T> {
   schema: string;
   multiSelect?: boolean;
   style?: any;
-  // eslint-disable-next-line no-unused-vars
+
   onOptionSubmit?: (value: string) => void;
 }
 
@@ -35,8 +34,8 @@ export default function UsersAutocomplete<T extends unknown>({
   multiSelect = false,
   style,
 }: Iprops<T>) {
-  const [searchVal, setSearchVal] = useState("");
-  const { data, error, isLoading } = useSWR("/api/clerkUsers", fetcher, {
+  const [searchVal, setSearchVal] = useState('');
+  const { data, error, isLoading } = useSWR('/api/clerkUsers', fetcher, {
     revalidateOnFocus: false,
     dedupingInterval: 5 * 60 * 1000,
   });
@@ -53,14 +52,9 @@ export default function UsersAutocomplete<T extends unknown>({
       />
     );
 
-  if (error)
-    return (
-      <TextInput label={label} error="Failed to load" disabled style={style} />
-    );
+  if (error) return <TextInput label={label} error="Failed to load" disabled style={style} />;
 
-  const renderAutocompleteOption: SelectProps["renderOption"] = ({
-    option,
-  }) => {
+  const renderAutocompleteOption: SelectProps['renderOption'] = ({ option }) => {
     const optionUser = data.find((u: any) => u.id === option.value);
     if (!optionUser) return null;
     return (
@@ -93,7 +87,7 @@ export default function UsersAutocomplete<T extends unknown>({
     searchable: true,
     key: form.key(schema),
     style: style,
-    ...form.getInputProps(schema, { type: "input" }),
+    ...form.getInputProps(schema, { type: 'input' }),
   };
 
   if (multiSelect) {

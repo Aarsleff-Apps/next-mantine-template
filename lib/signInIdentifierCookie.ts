@@ -1,29 +1,29 @@
-const SIGN_IN_IDENTIFIER_COOKIE_NAME = "aar_sign_in_email";
+const SIGN_IN_IDENTIFIER_COOKIE_NAME = 'aar_sign_in_email';
 const SIGN_IN_IDENTIFIER_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 
 function buildCookieAttributes(maxAgeSeconds?: number) {
-  const attributes = ["Path=/", "SameSite=Lax"];
+  const attributes = ['Path=/', 'SameSite=Lax'];
 
-  if (typeof window !== "undefined" && window.location.protocol === "https:") {
-    attributes.push("Secure");
+  if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+    attributes.push('Secure');
   }
 
-  if (typeof maxAgeSeconds === "number") {
+  if (typeof maxAgeSeconds === 'number') {
     attributes.push(`Max-Age=${maxAgeSeconds}`);
   }
 
-  return attributes.join("; ");
+  return attributes.join('; ');
 }
 
 export function getStoredSignInIdentifier() {
-  if (typeof document === "undefined") {
+  if (typeof document === 'undefined') {
     return null;
   }
 
-  const cookies = document.cookie ? document.cookie.split("; ") : [];
+  const cookies = document.cookie ? document.cookie.split('; ') : [];
 
   for (const cookie of cookies) {
-    const separatorIndex = cookie.indexOf("=");
+    const separatorIndex = cookie.indexOf('=');
 
     if (separatorIndex === -1) {
       continue;
@@ -44,21 +44,19 @@ export function getStoredSignInIdentifier() {
 }
 
 export function storeSignInIdentifier(identifier: string) {
-  if (typeof document === "undefined" || !identifier) {
+  if (typeof document === 'undefined' || !identifier) {
     return;
   }
 
   document.cookie = `${SIGN_IN_IDENTIFIER_COOKIE_NAME}=${encodeURIComponent(
-    identifier
+    identifier,
   )}; ${buildCookieAttributes(SIGN_IN_IDENTIFIER_COOKIE_MAX_AGE_SECONDS)}`;
 }
 
 export function clearStoredSignInIdentifier() {
-  if (typeof document === "undefined") {
+  if (typeof document === 'undefined') {
     return;
   }
 
-  document.cookie = `${SIGN_IN_IDENTIFIER_COOKIE_NAME}=; ${buildCookieAttributes(
-    0
-  )}`;
+  document.cookie = `${SIGN_IN_IDENTIFIER_COOKIE_NAME}=; ${buildCookieAttributes(0)}`;
 }

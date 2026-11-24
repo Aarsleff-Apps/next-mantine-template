@@ -1,12 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "webworker"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext", "webworker"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,13 +14,9 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "types": [
-      "@serwist/next/typings"
-    ],
+    "types": ["@serwist/next/typings"],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
     "plugins": [
       {
@@ -40,7 +31,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
