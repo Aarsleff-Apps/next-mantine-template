@@ -1,21 +1,12 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import prettier from 'eslint-config-prettier';
 
 export default [
   {
-    ignores: ['**/*.js', '**/*.cjs', '**/*.mjs'],
+    ignores: ['**/*.js', '**/*.cjs', '**/*.mjs', '.next/**', 'public/**', '.source/**'],
   },
-  ...compat.extends('next/core-web-vitals', 'prettier'),
+  ...nextVitals,
+  prettier,
   {
     rules: {
       'no-console': [
@@ -25,7 +16,9 @@ export default [
         },
       ],
 
-      'no-unused-vars': 'error',
+      // The base rule flags TypeScript type signatures; the TS-aware rule doesn't.
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'error',
     },
   },
 ];

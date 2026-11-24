@@ -1,0 +1,18 @@
+# Husky sets core.hooksPath, which bypasses .git/hooks. Forward to a locally installed
+# prepare-commit-msg hook (e.g. OpenCommit's `oco hook set`) if there is one.
+#
+# - Use the common git dir directly: `git rev-parse --git-path hooks/...` honours
+#   core.hooksPath and would return husky's own wrapper, recursing forever.
+# - OpenCommit only runs in hook mode when its script path ends with
+#   "<core.hooksPath>/prepare-commit-msg" (here ".husky/_/prepare-commit-msg"), otherwise it
+#   starts interactively and fails without a TTY. Call it through a symlink with that suffix.
+hook="$(git rev-parse --git-common-dir)/hooks/prepare-commit-msg"
+[ -x "$hook" ] || exit 0
+
+dir="$(mktemp -d)"
+mkdir -p "$dir/.husky/_"
+ln -s "$(cd "$(dirname "$hook")" && pwd)/$(basename "$hook")" "$dir/.husky/_/prepare-commit-msg"
+"$dir/.husky/_/prepare-commit-msg" "$@"
+code=$?
+rm -rf "$dir"
+exit $code
