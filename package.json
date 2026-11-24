@@ -31,12 +31,12 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.2",
-    "@mantine/core": "9.3.1",
-    "@mantine/dates": "9.3.1",
-    "@mantine/form": "9.3.1",
-    "@mantine/hooks": "9.3.1",
-    "@mantine/modals": "9.3.1",
-    "@mantine/notifications": "9.3.1",
+    "@mantine/core": "9.8.2",
+    "@mantine/dates": "9.8.2",
+    "@mantine/form": "9.8.2",
+    "@mantine/hooks": "9.8.2",
+    "@mantine/modals": "9.8.2",
+    "@mantine/notifications": "9.8.2",
     "@serwist/next": "^9.0.10",
     "@tabler/icons-react": "^3.22.0",
     "@types/react": "18",
@@ -69,7 +69,7 @@
     "serwist": "^9.0.10",
     "typescript": "6.0.2"
   },
-  "packageManager": "yarn@4.16.0",
+  "packageManager": "yarn@4.19.0",
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
